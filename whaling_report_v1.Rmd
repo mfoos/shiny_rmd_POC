@@ -3,6 +3,9 @@ title: "NB Whaling Museum Whaler Database"
 author: "Marianna Foos"
 date: "1/23/2017"
 output: html_document
+params:
+  color:
+    value: black
 ---
 
 ```{r globals, echo = FALSE, message=FALSE}
@@ -20,7 +23,7 @@ crewlist$departYear <- format(crewlist$ApproximateDeparture, "%Y")
 ### How did whaling wax and wane over the century?
 ```{r year-plot}
 ggplot(crewlist, aes(x = departYear)) + 
-  geom_bar() + 
+  geom_bar(fill = params$color) + 
   ggtitle("New Bedford/Fairhaven Whaleship Departures, 1809-1927") +
   theme(axis.text.x = element_text(angle=45, size=12, hjust = 1))
 ```

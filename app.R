@@ -9,7 +9,9 @@ ui <- fluidPage(
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
-         actionButton("goknit", "knit")
+        selectInput("color", "Choose a bar chart color:", 
+                    choices = c("purple", "pink", "blue", "red", "green")),
+        actionButton("goknit", "knit")
       ),
       
       mainPanel(
@@ -23,7 +25,8 @@ server <- function(input, output, session) {
    
   reportdone <- eventReactive(input$goknit, {
     render("whaling_report_v1.Rmd", 
-           output_format = "html_document")
+           output_format = "html_document",
+           params = list(color = isolate(input$color)))
   })
   
   output$buttonappear <- renderUI({
