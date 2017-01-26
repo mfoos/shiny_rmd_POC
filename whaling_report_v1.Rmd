@@ -1,0 +1,46 @@
+---
+title: "NB Whaling Museum Whaler Database"
+author: "Marianna Foos"
+date: "1/23/2017"
+output: html_document
+---
+
+```{r globals, echo = FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+
+crewlist <- read.table("whalemenDB_cleaned_again.tsv", sep = "\t", header = TRUE)
+```
+
+```{r clean}
+crewlist$ApproximateDeparture <- as.Date(crewlist$ApproximateDeparture, format = "%m/%d/%Y")
+crewlist$departYear <- format(crewlist$ApproximateDeparture, "%Y")
+```
+
+### How did whaling wax and wane over the century?
+```{r year-plot}
+ggplot(crewlist, aes(x = departYear)) + 
+  geom_bar() + 
+  ggtitle("New Bedford/Fairhaven Whaleship Departures, 1809-1927") +
+  theme(axis.text.x = element_text(angle=45, size=12, hjust = 1))
+```
+
+---
+
+### Which ships made the most voyages? How noisy is this data?
+```{r top-table}
+voyages <- crewlist %>% 
+  select(Vessel, ApproximateDeparture) %>% 
+  unique() %>% 
+  group_by(Vessel) %>% 
+  tally() %>%
+  arrange(desc(n)) %>%
+  head(20)
+
+knitr::kable(voyages, caption = "Voyages Per Vessel")
+```
+
+```{r ref.label="globals"}
+```
+
+Last rendered: `r Sys.time()`
